@@ -44,6 +44,17 @@ class Solver:
         """
         Initialise any variables required before the start of Value Iteration.
         """
+        transition_outcomes = {}
+        dummy_status = tuple([True] * len(self.crystals))
+        for r in range(game_env.n_rows):
+            for c in range(game_env.n_cols):
+                state = GameState(row=r, col=c, crystal_status=dummy_status, rocket_jumps_left=inf)
+                for a in self.ACTION_BASE_COST.keys():
+                    valid, error, next, reward, terminal = apply_dynamics(self, state, action):
+                    transition_outcomes[(row, col, a)] = (next, reward)
+     
+
+                        
         #
         # TODO: Implement any initialisation for Value Iteration (e.g. building a list of states) here. You should not
         #  perform value iteration in this method.

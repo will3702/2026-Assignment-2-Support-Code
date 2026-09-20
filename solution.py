@@ -44,6 +44,7 @@ class Solver:
         """
         Initialise any variables required before the start of Value Iteration.
         """
+        
         #
         # TODO: Implement any initialisation for Value Iteration (e.g. building a list of states) here. You should not
         #  perform value iteration in this method.

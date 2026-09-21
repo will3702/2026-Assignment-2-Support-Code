@@ -39,7 +39,80 @@ class Solver:
         return [1, 2, 3, 4, 5]
 
     # === Value Iteration ==============================================================================================
-
+    def move(self, state, action, distance):
+            """
+            Apply the dynamics of the game to the given state and action and return the resulting state and reward.
+            :param state: current GameState
+            :param action: action string
+            :return: action is valid (True/False), error message if invalid, next state, reward, state is terminal
+            """
+    
+            if action not in self.ACTIONS:
+                return False, "Invalid action", None, 0.0, None
+    
+            reward = -1 * self.ACTION_COST[action]
+            next_row, next_col = state.row, state.col
+    
+            direction = self._action_direction(action)
+    
+            deltas = {
+                'LEFT': (0, -1),
+                'RIGHT': (0, 1),
+                'UP': (-1, 0),
+                'DOWN': (1, 0),
+            }
+    
+            delta_row, delta_col = deltas[direction]
+    
+            if action in self.JUMP_ACTIONS:
+                if self.grid_data[state.row][state.col] != self.CRATER_TILE:
+                    return False, "Cannot perform rocket jump", None, 0.0, None
+                move_distance = distance
+            elif action in self.WALK_ACTIONS:
+                if self.grid_data[state.row][state.col] == self.CRATER_TILE:
+                    return False, "Cannot perform action: in a crater", None, 0.0, None
+                move_distance = distance
+            elif action in self.BOOST_ACTIONS:
+                if self.grid_data[state.row][state.col] == self.CRATER_TILE:
+                    return False, "Cannot perform action: in a crater", None, 0.0, None
+                # sample the boost distance based on the boost probabilities
+                move_distance = distance
+    
+            collision = False
+            for _ in range(move_distance):
+                candidate_row = next_row + delta_row
+                candidate_col = next_col + delta_col
+                if not (0 <= candidate_row < self.n_rows and 0 <= candidate_col < self.n_cols) \
+                        or self.grid_data[candidate_row][candidate_col] == self.ROCK_TILE:
+                    reward -= self.collision_penalty
+                    collision = True
+                    break
+    
+                next_row, next_col = candidate_row, candidate_col
+    
+                # fall into a crater
+                if self.grid_data[next_row][next_col] == self.CRATER_TILE:
+                    break
+    
+                # fall into lava
+                if self.grid_data[next_row][next_col] == self.LAVA_TILE:
+                    reward -= self.game_over_penalty
+                    break
+    
+            crystal_status = state.crystal_status
+            if (next_row, next_col) in self.crystal_positions:
+                crystal_index = self.crystal_positions.index((next_row, next_col))
+                if crystal_status[crystal_index] == 0:
+                    crystal_status = list(crystal_status)
+                    crystal_status[crystal_index] = 1
+                    crystal_status = tuple(crystal_status)
+    
+            next_state = GameState(next_row, next_col, crystal_status)
+            if not collision and self.is_game_over(next_state) and \
+                    self.grid_data[next_row][next_col] != self.LAVA_TILE:
+                reward -= self.game_over_penalty
+    
+            return True, None, next_state, reward, self.is_game_over(next_state)
 
 
     def get_transition_outcomes(self, state, action):
@@ -56,9 +129,9 @@ class Solver:
         outcomes = {}
         for movement, prob_movement in movement_distribution:
             for double, prob_double in double_distribution:
+                
                 for distance, prob_distance in dist_optins:
-                    distance_travelled  = distance * double
-                    action_probability = prob_movement * prob_double * prob_distance
+
 
         
     def vi_initialise(self):

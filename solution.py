@@ -40,18 +40,32 @@ class Solver:
 
     # === Value Iteration ==============================================================================================
 
+
+
+    def get_transition_outcomes(self, state, action):
+        env = self.environment
+        pd, p2 = env.random_drift_prob, env.random_double_prob
+        perp1, perp2 = env.PERPENDICULAR_ACTIONS[action]
+        movement_distribution = [(action, 1 - pd), (perp1, pd / 2), (perp2, pd / 2)]
+        double_distribution = [(1, 1 - p2), (2, p2)]
+
+        if action in env.BOOST_ACTIONS:
+            dist_options = list(enumerate(env.boost_probabilities))  # (distance, prob)
+        else:
+            dist_options = [(1, 1.0)]
+        outcomes = {}
+        for movement, prob_movement in movement_distribution:
+            for double, prob_double in double_distribution:
+                for distance, prob_distance in dist_optins:
+                    distance_travelled  = distance * double
+                    action_probability = prob_movement * prob_double * prob_distance
+
+        
     def vi_initialise(self):
         """
         Initialise any variables required before the start of Value Iteration.
         """
-        transition_outcomes = {}
-        dummy_status = tuple([True] * len(self.crystals))
-        for r in range(game_env.n_rows):
-            for c in range(game_env.n_cols):
-                state = GameState(row=r, col=c, crystal_status=dummy_status, rocket_jumps_left=inf)
-                for a in self.ACTION_BASE_COST.keys():
-                    valid, error, next, rewad, terminal = apply_dynamics(self, state, action):
-                    transition_outcomes[(row, col, a)] = (next, reward)
+
      
 
                         

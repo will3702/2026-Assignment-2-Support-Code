@@ -40,91 +40,31 @@ class Solver:
         return [1, 2, 3, 4, 5]
 
     # === Value Iteration ==============================================================================================
-    def get_valid_actions(self, state):
-        """
-        Get a list of valid actions from the given state.
-        :param state: current GameState
-        :return: list of valid action strings
-        """
-        valid_actions = []
-        for action in self.ACTIONS:
-        valid, error_msg, next_row, next_col = self.is_valid_action(state, action)
-        if valid:
-            valid_actions.append(action)
-        return valid_actions
-    
-
-    def is_valid_action(self, state, action):
-        """
-        Check if the given action is valid from the given state.
-        :param state: current GameState
-        :param action: action string
-        :return: True if valid, False otherwise
-        """
-        error_msg = None
-        if action not in self.ACTIONS:
-            error_msg = "Invalid action"
-            return False, error_msg, None, None
-        if action in self.JUMP_ACTIONS:
-            if self.grid_data[state.row][state.col] != self.CRATER_TILE or state.rocket_jumps_left <= 0:
-                error_msg = "Cannot perform rocket jump"
-                return False, error_msg, None, None
-            direction = self._action_direction(action)
-            if direction == 'LEFT':
-                delta_row, delta_col = 0, -1
-            elif direction == 'RIGHT':
-                delta_row, delta_col = 0, 1
-            elif direction == 'UP':
-                delta_row, delta_col = -1, 0
-            elif direction == 'DOWN':
-                delta_row, delta_col = 1, 0
-            next_row = state.row + delta_row
-            next_col = state.col + delta_col
-            if not (0 <= next_row < self.n_rows and 0 <= next_col < self.n_cols):
-                error_msg = "Cannot perform rocket jump: out of bounds"
-                return False, error_msg, None, None
-            if self.grid_data[next_row][next_col] == self.ROCK_TILE:
-                error_msg = "Cannot perform rocket jump: rock in the way"
-                return False, error_msg, None, None
-
-        if action in self.BOOST_ACTIONS or action in self.WALK_ACTIONS:
-            if self.grid_data[state.row][state.col] == self.CRATER_TILE:
-                error_msg = "Cannot perform action: in a crater"
-                return False, error_msg, None, None
-
-            direction = self._action_direction(action)
-            if direction == 'LEFT':
-                delta_row, delta_col = 0, -1
-            elif direction == 'RIGHT':
-                delta_row, delta_col = 0, 1
-            elif direction == 'UP':
-                delta_row, delta_col = -1, 0
-            elif direction == 'DOWN':
-                delta_row, delta_col = 1, 0
-            next_row = state.row + delta_row
-            next_col = state.col + delta_col
-            if not (0 <= next_row < self.n_rows and 0 <= next_col < self.n_cols):
-                error_msg = "Cannot perform action: out of bounds"
-                return False, error_msg, None, None
-            if self.grid_data[next_row][next_col] == self.ROCK_TILE:
-                error_msg = "Cannot perform action: rock in the way"
-                return False, error_msg, None, None
-
-            if action in self.BOOST_ACTIONS:
-                # if it a boost action, check if you have fallen into a crater
-                if self.grid_data[next_row][next_col] == self.CRATER_TILE:
-                    return True, None, next_row, next_col
-
-                next_row += delta_row
-                next_col += delta_col
-                if not (0 <= next_row < self.n_rows and 0 <= next_col < self.n_cols):
-                    error_msg = "Cannot perform boost: out of bounds"
-                    return False, error_msg, None, None
-                if self.grid_data[next_row][next_col] == self.ROCK_TILE:
-                    error_msg = "Cannot perform boost: rock in the way"
-                    return False, error_msg, None, None
+    def get_successors(self, state):
         
-        return True, None, next_row, next_col
+            """
+            Apply the dynamics of the game to the given state and action and return the resulting state and reward.
+            :param state: current GameState
+            :param action: action string
+            :return: action is valid (True/False), error message if invalid, next state, reward, state is terminal
+            """
+
+        current_row, current_col = state.row, state.col
+        direction = self._action_direction(action)
+        outcomes = []
+        deltas = ((0, -1), (0, 1), (-1, 0), (1, 0))
+        for delta_row, delta_col in deltas:
+            candidate_row = next_row + delta_row
+            candidate_col = next_col + delta_col
+            if not (0 <= candidate_row < self.n_rows and 0 <= candidate_col < self.n_cols) \
+                        or self.grid_data[candidate_row][candidate_col] == self.ROCK_TILE or self.grid_data[next_row][next_col] == self.LAVA_TILE:
+                            continue
+            outcomes.append()
+        return outcomes
+            
+            
+
+    
         
     def move(self, state, action, distance):
             """

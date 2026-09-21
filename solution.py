@@ -50,7 +50,7 @@ class Solver:
             for c in range(game_env.n_cols):
                 state = GameState(row=r, col=c, crystal_status=dummy_status, rocket_jumps_left=inf)
                 for a in self.ACTION_BASE_COST.keys():
-                    valid, error, next, reward, terminal = apply_dynamics(self, state, action):
+                    valid, error, next, rewad, terminal = apply_dynamics(self, state, action):
                     transition_outcomes[(row, col, a)] = (next, reward)
      
 

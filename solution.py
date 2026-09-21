@@ -160,6 +160,20 @@ class Solver:
         """
         Initialise any variables required before the start of Value Iteration.
         """
+        start = env.get_init_state()
+        action_set = ["wl", "wr", "wu", "wd"]
+        visited = {start}
+        froniter = [start]
+        while frontier:
+            s = frontier.pop()
+            for actions in action_set:
+                valid, error, outcome_state, reward, terminal = move(s, actions, 1)
+                if not valid:
+                    continue 
+                if terminal:
+                    break
+                frontier.append(outcome_state)
+            
 
      
 

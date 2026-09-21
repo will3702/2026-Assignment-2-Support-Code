@@ -297,6 +297,7 @@ class Solver:
         Perform a single iteration of Value Iteration (i.e. loop over the state space once).
         """
         self.gamma = self.environment.gamma
+        best_delta = float("-inf")
         for states in self.states:
             best = float("-inf")
             for actions in self.valid_actions[s]:
@@ -306,6 +307,8 @@ class Solver:
                     Vprev = self.values.get(s2, 0)
                     V += p*(r + (self.gamma * Vprev))
                 best = max(V, best) 
+                delta = Vprev - V
+                best_delta = min(delta, best_delta)
             self.values[states] = best 
                 
                 

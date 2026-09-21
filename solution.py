@@ -129,8 +129,18 @@ class Solver:
         outcomes = {}
         for movement, prob_movement in movement_distribution:
             for double, prob_double in double_distribution:
-                
+                if dist_options == [(1, 1.0)]:
+                    distance = movement * double 
+                    prob = prob_movement * prob_double 
+                    valid, error, outcome_state, reward, terminal = move(state, movement, distance)
+                    outcomes.setdefault((outcome_state, movement), prob)) += prob
+                        
+                    
                 for distance, prob_distance in dist_optins:
+                    
+                        
+                    
+                    
 
 
         

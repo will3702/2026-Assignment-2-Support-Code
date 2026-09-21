@@ -131,11 +131,13 @@ class Solver:
         for movement, prob_movement in movement_distribution:
             for double, prob_double in double_distribution:
                 for dists in itertools.product(dist_options, repeat=int(double)):
+                    current = state
                     prob = prob_movement * prob_double 
                     total_reward = 0.0
                     for distance, prob_distance in dists:
                         prob *= prob_distance
-                        valid, error, outcome_state, reward, terminal = move(state, movement, distance)
+                        valid, error, outcome_state, reward, terminal = move(current, movement, distance)
+                        current = outcome_state
                         if not valid:
                             continue
                         if terminal: 

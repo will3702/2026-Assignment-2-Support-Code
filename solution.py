@@ -296,17 +296,16 @@ class Solver:
         """
         Perform a single iteration of Value Iteration (i.e. loop over the state space once).
         """
-        
-        self.values = {states: 0 for states in self.states}
         self.gamma = self.environment.gamma
         for states in self.states:
             best = float("-inf")
             for actions in self.valid_actions[s]:
-                self.transitions[(states, actions)] = outcomes
+                outcomes = self.transitions[(states, actions)] 
+                q = 0.0
                 for p, s2 , r in outcomes:
                     Vprev = self.values.get(s2, 0)
-                    V = p*(r + (self.gamm * Vprev))
-                    best = max(V, best) 
+                    V += p*(r + (self.gamma * Vprev))
+                best = max(V, best) 
             self.values[states] = best 
                 
                 

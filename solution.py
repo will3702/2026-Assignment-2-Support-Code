@@ -141,8 +141,8 @@ class Solver:
                         if terminal: 
                             break
                         total_reward += reward
-                key = (outcome_state, total_reward)
-                outcomes[key] = outcomes.get(key, 0.0) + prob
+                    key = (outcome_state, total_reward)
+                    outcomes[key] = outcomes.get(key, 0.0) + prob
         return [(p, s, r) for (s, r), p in outcomes.items()]
                     
                     

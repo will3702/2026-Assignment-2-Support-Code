@@ -140,6 +140,7 @@ class Solver:
                         current = outcome_state
                         if not valid:
                             continue
+                        total_reward += reward
                         if terminal: 
                             break
                         total_reward += reward

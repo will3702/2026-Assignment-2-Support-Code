@@ -137,14 +137,13 @@ class Solver:
                     for distance, prob_distance in dists:
                         prob *= prob_distance
                         valid, error, outcome_state, reward, terminal = move(current, movement, distance)
-                        current = outcome_state
                         if not valid:
                             continue
+                        current = outcome_state
                         total_reward += reward
                         if terminal: 
                             break
-                        total_reward += reward
-                    key = (outcome_state, total_reward)
+                    key = (current, total_reward)
                     outcomes[key] = outcomes.get(key, 0.0) + prob
         return [(p, s, r) for (s, r), p in outcomes.items()]
                     

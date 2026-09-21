@@ -130,14 +130,21 @@ class Solver:
         outcomes = {}
         for movement, prob_movement in movement_distribution:
             for double, prob_double in double_distribution:
-                for dists in itertools.product(dist_options, repeat=double):
+                for dists in itertools.product(dist_options, repeat=int(double)):
                     prob = prob_movement * prob_double 
+                    total_reward = 0.0
                     for distance, prob_distance in dists:
                         prob *= prob_distance
                         valid, error, outcome_state, reward, terminal = move(state, movement, distance)
                         if not valid:
                             continue
-                        
+                        if terminal: 
+                            break
+                        total_reward += reward
+                key = (outcome_state, total_reward)
+                outcomes[key] = outcomes.get(key, 0.0) + prob
+        return [(p, s, r) for (s, r), p in outcomes.items()]
+                    
                     
                 
                     

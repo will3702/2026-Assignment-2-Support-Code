@@ -252,6 +252,8 @@ class Solver:
         visited = {start}
         froniter = [start]
         self.states = []
+        self.values = {s: 0.0 for s in self.states}
+        self.policy = {}
         self.valid_actions = {}    
         self.transitions = {}
         while frontier:
@@ -299,15 +301,18 @@ class Solver:
         self.gamma = self.environment.gamma
         best_delta = float("-inf")
         for states in self.states:
+            if not self.valid_actions[states]:             
+                continue
             best = float("-inf")
-            for actions in self.valid_actions[s]:
+            best_action = None
+            for actions in self.valid_actions[states]:
                 outcomes = self.transitions[(states, actions)] 
-                q = 0.0
+                V = 0.0
                 for p, s2 , r in outcomes:
-                    Vprev = self.values.get(s2, 0)
+                    Vprev = self.values[s2]
                     V += p*(r + (self.gamma * Vprev))
                 best = max(V, best) 
-                delta = Vprev - V
+                delta = abs(best - self.values[states])
                 best_delta = min(delta, best_delta)
             self.values[states] = best 
                 

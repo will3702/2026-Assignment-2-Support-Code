@@ -270,14 +270,6 @@ class Solver:
                         visited.add(s2)
                         frontier.append(s2)
                         
-                    
-      
-               
-            
-
-     
-
-                        
         #
         # TODO: Implement any initialisation for Value Iteration (e.g. building a list of states) here. You should not
         #  perform value iteration in this method.
@@ -291,6 +283,7 @@ class Solver:
         Check if Value Iteration has reached convergence.
         :return: True if converged, False otherwise
         """
+        {x: 0 for x in self.states}
         #
         # TODO: Implement code to check if Value Iteration has reached convergence here.
         #
@@ -299,9 +292,11 @@ class Solver:
         pass
 
     def vi_iteration(self):
+        
         """
         Perform a single iteration of Value Iteration (i.e. loop over the state space once).
         """
+        
         #
         # TODO: Implement code to perform a single iteration of Value Iteration here.
         #

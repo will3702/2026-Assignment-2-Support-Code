@@ -256,13 +256,21 @@ class Solver:
         while frontier:
             s = frontier.pop()
             self.states.append(s)
-            for actions in get_valid_actions(s):
-                
-                if not valid:
-                    continue 
-                if terminal:
-                    break
-                frontier.append(outcome_state)
+            if env.is_solved(s) or env.is_game_over(s):
+                self.valid_actions[s] = []
+                continue
+            actions = get_valid_actions(s):
+            self.valid_actions[s] = actions
+            for a in actions:
+                outcomes = get_transition_outcomes(s, actions)
+                self.transitions[(s, a)] = outcomes
+                for p, s2 , r in outcomes:
+                    if s2 not in visited:
+                        frontier.append(s2)
+                        
+                    
+      
+               
             
 
      

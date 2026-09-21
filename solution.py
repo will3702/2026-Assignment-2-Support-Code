@@ -1,5 +1,6 @@
 import sys
 import time
+import itertools
 
 from game_env import GameEnv
 from game_state import GameState
@@ -129,14 +130,16 @@ class Solver:
         outcomes = {}
         for movement, prob_movement in movement_distribution:
             for double, prob_double in double_distribution:
-                if dist_options == [(1, 1.0)]:
-                    distance = movement * double 
+                for dists in itertools.product(dist_options, repeat=double):
                     prob = prob_movement * prob_double 
-                    valid, error, outcome_state, reward, terminal = move(state, movement, distance)
-                    outcomes.setdefault((outcome_state, movement), prob)) += prob
+                    for distance, prob_distance in dists:
+                        prob *= prob_distance
+                        valid, error, outcome_state, reward, terminal = move(state, movement, distance)
+                        if not valid:
+                            continue
                         
                     
-                for distance, prob_distance in dist_optins:
+                
                     
                         
                     

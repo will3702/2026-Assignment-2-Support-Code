@@ -247,6 +247,7 @@ class Solver:
         """
         Initialise any variables required before the start of Value Iteration.
         """
+        env = self.environment
         start = env.get_init_state()
         visited = {start}
         froniter = [start]
@@ -266,6 +267,7 @@ class Solver:
                 self.transitions[(s, a)] = outcomes
                 for p, s2 , r in outcomes:
                     if s2 not in visited:
+                        visited.add(s2)
                         frontier.append(s2)
                         
                     
